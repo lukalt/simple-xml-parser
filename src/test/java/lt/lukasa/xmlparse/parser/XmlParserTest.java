@@ -19,8 +19,8 @@ import java.util.List;
  * @since 13.04.2021
  */
 class XmlParserTest {
-    public static void main(String[] args) throws IOException, XmlParseException {
-        String input = new String(Files.readAllBytes(new File("G:\\projects\\skywars\\pom.xml").toPath()), StandardCharsets.UTF_8);
+  /*  public static void main(String[] args) throws IOException, XmlParseException {
+        String input = new String(Files.readAllBytes(new File("path/to/project/pom.xml").toPath()), StandardCharsets.UTF_8);
         Lexer lexer = new Lexer();
 
         long s1 = System.nanoTime();
@@ -37,5 +37,5 @@ class XmlParserTest {
         StringBuilder builder = new StringBuilder();
         parse.write(new StringBuilderWriter(builder));
         System.out.println(builder);
-    }
+    }*/
 }

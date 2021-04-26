@@ -13,7 +13,9 @@ public class XmlComment implements XmlElement {
 
     @Override
     public String toString() {
-        return this.comment;
+        return "XmlComment{" +
+                "comment='" + comment + '\'' +
+                '}';
     }
 
     @Override

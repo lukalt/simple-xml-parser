@@ -18,7 +18,13 @@ public class XmlNode implements XmlElement {
 
     @Override
     public String toString() {
-        return tags.stream().map(a -> a.toString()).collect(Collectors.joining());
+        if(tags.isEmpty()) {
+            return "";
+        } else if(tags.size() == 1) {
+            return tags.get(0).toString();
+        } else {
+            return "[" + tags.stream().map(a -> a.toString()).collect(Collectors.joining(",")) + "]";
+        }
     }
 
     @Override

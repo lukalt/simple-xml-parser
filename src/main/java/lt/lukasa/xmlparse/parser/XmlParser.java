@@ -5,6 +5,7 @@ import lt.lukasa.xmlparse.lexer.lexemes.*;
 import lt.lukasa.xmlparse.parser.elements.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 
@@ -33,12 +34,30 @@ public class XmlParser {
         return new XmlComment(comment.toString());
     }
 
-    public XmlElement parse(Queue<Lexeme> lexemes) throws XmlParseException {
-        List<XmlElement> elements = new ArrayList<>();
-        if(lexemes.peek() instanceof HeaderLexeme) {
-            elements.add(new XmlHeader(((HeaderLexeme)lexemes.poll()).getAttributeData()));
+    public XmlDocument parse(Queue<Lexeme> lexemes) throws XmlParseException {
+        String firstPrefix = null;
+        if(lexemes.peek() instanceof TextLexeme) {
+            firstPrefix = ((TextLexeme) lexemes.poll()).getValue();
         }
-        return parse(lexemes, elements);
+        XmlHeader header = null;
+        if(lexemes.peek() instanceof HeaderLexeme) {
+            header = new XmlHeader(((HeaderLexeme)lexemes.poll()).getAttributeData());
+        }
+        String secondPrefix = null;
+        if(header != null && lexemes.peek() instanceof TextLexeme) {
+            secondPrefix = ((TextLexeme) lexemes.poll()).getValue();
+        }
+        XmlElement element = parse(lexemes, new ArrayList<>());
+        if(element instanceof XmlTag) {
+            return new XmlDocument(firstPrefix, header, secondPrefix, (XmlTag) element);
+        } else if(element instanceof XmlNode) {
+            for (XmlElement tag : ((XmlNode) element).getTags()) {
+                if(tag instanceof XmlTag) {
+                    return new XmlDocument(firstPrefix, header, secondPrefix, (XmlTag) tag);
+                }
+            }
+        }
+        throw new XmlParseException("Missing root element");
     }
 
     XmlElement parse(Queue<Lexeme> lexemes, List<XmlElement> tags) throws XmlParseException {

@@ -15,6 +15,13 @@ public class XmlHeader implements XmlElement {
     private final AttributeData attributes;
 
     @Override
+    public String toString() {
+        return "Header{" +
+                "attributes=" + attributes +
+                '}';
+    }
+
+    @Override
     public void write(StringWriter builder) {
         builder.append("<?xml");
         this.attributes.write(builder);

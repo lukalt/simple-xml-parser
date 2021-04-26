@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author Lukas Alt
@@ -46,7 +47,7 @@ public class AttributeData {
         if (val != null) {
             val.value = value;
         } else {
-            this.data.put(key, new AttributeVal(value, "\n"));
+            this.data.put(key, new AttributeVal(value, " "));
         }
     }
 
@@ -56,6 +57,10 @@ public class AttributeData {
             return val.value != null;
         }
         return false;
+    }
+
+    public static AttributeData newAttributeData() {
+        return new AttributeData("");
     }
 
     public static AttributeData parseTagBody(String prefix, String input) {
@@ -71,6 +76,11 @@ public class AttributeData {
         StringBuilder sb = new StringBuilder();
         write(new StringBuilderWriter(sb));
         return sb.toString();
+    }
+
+    @Override
+    public String toString() {
+        return data.entrySet().stream().map(a -> a.getKey() + "=" + a.getValue().getValue()).collect(Collectors.joining(","));
     }
 
     public void write(StringWriter builder) {

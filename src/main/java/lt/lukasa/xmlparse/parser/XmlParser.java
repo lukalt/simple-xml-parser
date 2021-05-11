@@ -5,7 +5,6 @@ import lt.lukasa.xmlparse.lexer.lexemes.*;
 import lt.lukasa.xmlparse.parser.elements.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 
@@ -49,12 +48,19 @@ public class XmlParser {
         }
         XmlElement element = parse(lexemes, new ArrayList<>());
         if(element instanceof XmlTag) {
-            return new XmlDocument(firstPrefix, header, secondPrefix, (XmlTag) element);
+            return new XmlDocument(firstPrefix, header, secondPrefix, (XmlTag) element, null);
         } else if(element instanceof XmlNode) {
+            List<XmlElement> suffix = new ArrayList<>();
+            XmlDocument document = null;
             for (XmlElement tag : ((XmlNode) element).getTags()) {
-                if(tag instanceof XmlTag) {
-                    return new XmlDocument(firstPrefix, header, secondPrefix, (XmlTag) tag);
+                if(tag instanceof XmlTag && document == null) {
+                    document = new XmlDocument(firstPrefix, header, secondPrefix, (XmlTag) tag, suffix);
+                } else if(document != null){
+                    suffix.add(tag);
                 }
+            }
+            if(document != null) {
+                return document;
             }
         }
         throw new XmlParseException("Missing root element");

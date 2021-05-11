@@ -27,7 +27,7 @@ public class IOUtil {
             String s;
             while ((s = reader.readLine()) != null) {
                 input.append(s);
-                if (inputStream.available() > 0) {
+                if (input.length() > 0) {
                     input.append('\n');
                 }
             }

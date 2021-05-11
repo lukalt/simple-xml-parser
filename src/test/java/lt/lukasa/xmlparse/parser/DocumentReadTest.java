@@ -28,6 +28,8 @@ public class DocumentReadTest {
         assertEquals("44.95", firstBook.getFirstChild("price").getTagValue());
         assertEquals(44.95, firstBook.getFirstChild("price").getDoubleValue());
         assertEquals(44.95F, firstBook.getFirstChild("price").getFloatValue());
+        assertThrows(NumberFormatException.class, () -> firstBook.getFirstChild("genre").getIntValue());
+        assertThrows(NumberFormatException.class, () -> firstBook.getFirstChild("title").getIntValue());
         assertEquals("2000-10-01", firstBook.getFirstChild("publish_date").getTagValue());
        /* assertEquals("An in-depth look at creating applications\n" +
                 "            with XML.", firstBook.getFirstChild("description").getTagValue());*/
